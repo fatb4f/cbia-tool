@@ -1,0 +1,31 @@
+[project]
+name = "cbia-workbench"
+version = "0.0.0"
+description = "CBIA tooling/workbench (consumes generated material; provides REPL + observability helpers)."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "konch>=6.0.1",
+  "ptpython>=3.0.32",
+  "rich>=13.7.0",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.0.0",
+  "ruff>=0.5.0",
+  "pyright>=1.1.380",
+]
+
+[tool.uv]
+# If/when you vendor algoctrl as a workspace package, add:
+# [tool.uv.sources]
+# algoctrl-tmpl = { path = "packages/algoctrl", editable = true }
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.pyright]
+pythonVersion = "3.11"
+typeCheckingMode = "basic"
