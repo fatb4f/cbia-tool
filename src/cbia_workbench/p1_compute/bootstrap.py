@@ -51,7 +51,7 @@ def bootstrap(*, log_dir: str | None = None) -> Dict[str, Any]:
         "log": ctx.log,
         "eofl": ctx.eofl,
         "obs": ctx.obs,
-        "op": ctx.op,
+        "op": dict(ctx.op),
         "core": core_ops,
         "io": io_json,
         "E": errors,
