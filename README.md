@@ -21,4 +21,30 @@ uv sync --all-extras
 uv run konch -c repl/konch.py
 ```
 
+## Notebook usage (optional)
+
+Install notebook extras:
+
+```bash
+pip install -e '.[notebook]'
+```
+
+Or with uv:
+
+```bash
+uv sync --extra notebook
+```
+
+Bootstrap in a notebook:
+
+```python
+from cbia_workbench.notebook import bootstrap_notebook
+
+ctx = bootstrap_notebook()
+globals().update({"ctx": ctx, "log": ctx.log, "eofl": ctx.eofl, "obs": ctx.obs, "op": ctx.op})
+```
+
+Templates live in `notebooks/templates/` (Jupytext Markdown format) and are intended
+for lightweight drills and exercises. Notebooks are optional; the core install stays lean.
+
 Date: 2026-01-04
