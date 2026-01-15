@@ -18,6 +18,8 @@ class SessionLoggingConfig:
     log_dir: Optional[Path] = None
     prefix: str = "cbia"
     include_pid: bool = True
+    console: bool = True
+    flush_every: int = 1
 
 
 class SessionLogger:
@@ -28,7 +30,8 @@ class SessionLogger:
         self.session_id: str | None = None
         self.path: Path | None = None
         self._fp = None
-        self._console = Console() if Console else None
+        self._console = Console() if Console and cfg.console else None
+        self._event_count = 0
 
     def start(self) -> "SessionLogger":
         ts = time.strftime("%Y%m%d-%H%M%S")
@@ -37,7 +40,8 @@ class SessionLogger:
         log_dir = self.cfg.log_dir or Path.cwd() / ".logs"
         log_dir.mkdir(parents=True, exist_ok=True)
         self.path = log_dir / f"{self.session_id}.ndjson"
-        self._fp = self.path.open("a", encoding="utf-8")
+        self._fp = self.path.open("a", encoding="utf-8", buffering=1)
+        self._event_count = 0
         self.event("session_start", {"session_id": self.session_id, "path": str(self.path)})
         return self
 
@@ -52,15 +56,19 @@ class SessionLogger:
         line = json.dumps(payload, ensure_ascii=False)
         if self._fp:
             self._fp.write(line + "\n")
-            self._fp.flush()
+            self._event_count += 1
+            flush_every = max(1, self.cfg.flush_every)
+            if self._event_count % flush_every == 0:
+                self._fp.flush()
 
-        msg = f"[{kind}]"
-        if "note" in data:
-            msg += f" {data['note']}"
-        if self._console:
-            self._console.print(msg)
-        else:
-            print(msg)
+        if self.cfg.console:
+            msg = f"[{kind}]"
+            if "note" in data:
+                msg += f" {data['note']}"
+            if self._console:
+                self._console.print(msg)
+            else:
+                print(msg)
 
     def kv(self, **items: Any) -> None:
         self.event("kv", items)

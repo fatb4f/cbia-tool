@@ -16,6 +16,10 @@ dev = [
   "ruff>=0.5.0",
   "pyright>=1.1.380",
 ]
+notebook = [
+  "ipykernel",
+  "jupytext",
+]
 
 [tool.uv]
 # If/when you vendor algoctrl as a workspace package, add:
