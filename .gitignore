@@ -1,2 +1,6 @@
 [uv]
 uv.lock
+# runtime / local artifacts
+.tmp-logs/
+__pycache__/
+*.py[cod]
