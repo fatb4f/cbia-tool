@@ -21,6 +21,22 @@ uv sync --all-extras
 uv run konch -c repl/konch.py
 ```
 
+## Tools
+
+Sync material from cbia-builder:
+
+```bash
+python tools/sync_material.py --src ../cbia-builder/dist/material --clean
+```
+
+Use `--fast` to speed up copies by skipping metadata when you don't need it:
+
+```bash
+python tools/sync_material.py --src ../cbia-builder/dist/material --clean --fast
+```
+
+Lockfile policy: the template must not ship lockfiles; downstream generates its own `uv.lock`.
+
 ## Notebook usage (optional)
 
 Install notebook extras:

@@ -1,4 +1,4 @@
-from operators.core_ops import normalize_numbers, summarize
+from cbia_workbench.operators.core_ops import normalize_numbers, summarize
 
 def test_normalize_numbers_pure_and_sorted():
     xs = [3, -1, 2, 2, 0]

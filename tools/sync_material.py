@@ -19,7 +19,7 @@ def die(msg: str) -> None:
     sys.exit(1)
 
 
-def sync_material(src: Path, dst: Path, *, clean: bool = False) -> None:
+def sync_material(src: Path, dst: Path, *, clean: bool = False, fast: bool = False) -> None:
     if not src.exists():
         die(f"source does not exist: {src}")
 
@@ -34,7 +34,8 @@ def sync_material(src: Path, dst: Path, *, clean: bool = False) -> None:
     if dst.exists():
         die(f"destination already exists: {dst} (use --clean to overwrite)")
 
-    shutil.copytree(src, dst)
+    copy_fn = shutil.copy if fast else shutil.copy2
+    shutil.copytree(src, dst, copy_function=copy_fn)
     print(f"[sync-material] synced {src} → {dst}")
 
 
@@ -59,9 +60,14 @@ def main() -> None:
         action="store_true",
         help="Remove destination before syncing",
     )
+    parser.add_argument(
+        "--fast",
+        action="store_true",
+        help="Use fast copy (skip metadata)",
+    )
 
     args = parser.parse_args()
-    sync_material(args.src, args.dst, clean=args.clean)
+    sync_material(args.src, args.dst, clean=args.clean, fast=args.fast)
 
 
 if __name__ == "__main__":
